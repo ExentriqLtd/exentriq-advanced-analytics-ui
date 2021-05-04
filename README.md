@@ -1,5 +1,13 @@
 # @superset-ui
 
+# Exentriq fork from commit below
+
+commit 2c32a3f079f08e07bbc0dfb7a1cfd1d5eb3bbf55 (HEAD -> master, origin/master, origin/HEAD)
+Author: Ville Brofeldt <33317356+villebro@users.noreply.github.com>
+Date:   Thu Nov 5 14:59:06 2020 +0200
+
+    fix: point version badge to npm page (#821)
+
 [![Codecov branch](https://img.shields.io/codecov/c/github/apache-superset/superset-ui/master.svg?style=flat-square)](https://codecov.io/gh/apache-superset/superset-ui/branch/master)
 [![Build Status](https://img.shields.io/travis/com/apache-superset/superset-ui/master.svg?style=flat-square)](https://travis-ci.com/apache-superset/superset-ui)
 [![David](https://img.shields.io/david/dev/apache-superset/superset-ui.svg?style=flat-square)](https://david-dm.org/apache-superset/superset-ui?type=dev)
