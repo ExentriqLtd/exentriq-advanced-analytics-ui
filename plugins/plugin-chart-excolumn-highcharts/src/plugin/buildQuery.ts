@@ -36,6 +36,8 @@ export default function buildQuery(formData: QueryFormData) {
   return buildQueryContext(formData, baseQueryObject => [
     {
       ...baseQueryObject,
+      // Time series charts need to set the `is_timeseries` flag to true
+      is_timeseries: true,
     },
   ]);
 }

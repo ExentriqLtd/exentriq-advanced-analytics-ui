@@ -26,7 +26,7 @@ export default function transformProps(chartProps: ChartProps) {
    *
    * The transformProps function is also quite useful to return
    * additional/modified props to your data viz component. The formData
-   * can also be accessed from your ExtreemapHighcharts.tsx file, but
+   * can also be accessed from your ExcolumnHighcharts.tsx file, but
    * doing supplying custom props here is often handy for integrating third
    * party libraries that rely on specific props.
    *
@@ -57,7 +57,13 @@ export default function transformProps(chartProps: ChartProps) {
   return {
     width,
     height,
-    data,
+
+    data: data.map(item => ({
+      ...item,
+      // convert epoch to native Date
+      // eslint-disable-next-line no-underscore-dangle
+      __timestamp: new Date(item.__timestamp as number),
+    })),
     // and now your control data, manipulated as needed, and passed through as props!
     boldText,
     headerFontSize,

@@ -21,7 +21,7 @@ import { styled } from '@superset-ui/core';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import _ from 'lodash';
-import { ExtreemapHighchartsProps, ExtreemapHighchartsStylesProps } from './types';
+import { ExcolumnHighchartsProps, ExcolumnHighchartsStylesProps } from './types';
 
 // The following Styles component is a <div> element, which has been styled using Emotion
 // For docs, visit https://emotion.sh/docs/styled
@@ -30,7 +30,7 @@ import { ExtreemapHighchartsProps, ExtreemapHighchartsStylesProps } from './type
 // imported from @superset-ui/core. For variables available, please visit
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
-const Styles = styled.div<PluginExbarHighchartsStylesProps>`
+const Styles = styled.div<ExcolumnHighchartsStylesProps>`
   padding: ${({ theme }) => theme.gridUnit * 4}px;
   border-radius: ${({ theme }) => theme.gridUnit * 2}px;
   height: ${({ height }) => height};
@@ -46,7 +46,7 @@ const Styles = styled.div<PluginExbarHighchartsStylesProps>`
  *  * FormData (your controls!) provided as props by transformProps.ts
  */
 
-export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchartsProps> {
+export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighchartsProps> {
   // Often, you just want to get a hold of the DOM and go nuts.
   // Here, you can do that with createRef, and componentDidMount.
 
@@ -65,45 +65,57 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
 
     console.log('Plugin props', this.props);
 
-    const treeData: never[] = [];
-
-    const optionsTreeMap = {
+    const orderColumnChart = {
       chart: {
-        height: '60%',
+        type: 'column',
+      },
+      title: {
+        text: 'Monthly',
+      },
+      xAxis: {
+        categories: [
+          'May 2020',
+          'Jun 2020',
+          'Jul 2020',
+          'Aug 2020',
+          'Sep 2020',
+          'Oct 2020',
+          'Nov 2020',
+          'Dec 2020',
+          'Jan 2021',
+          'Feb 2021',
+          'Mar 2021',
+          'Apr 2021',
+        ],
+        crosshair: true,
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Total',
+        },
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat:
+          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true,
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+        },
       },
       series: [
         {
-          type: 'treemap',
-          layoutAlgorithm: 'squarified',
-          allowDrillToNode: true,
-          animationLimit: 1000,
-          dataLabels: {
-            format: '{point.name}: {point.value}',
-            enabled: false,
-          },
-          levelIsConstant: false,
-          levels: [
-            {
-              level: 1,
-              dataLabels: {
-                enabled: true,
-                style: {
-                  fontSize: '14px',
-                },
-              },
-              borderWidth: 3,
-            },
-          ],
-          data: treeData,
+          name: 'Quantity',
+          data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
         },
       ],
-      title: {
-        text: '',
-      },
-      tooltip: {
-        headerFormat: '',
-        pointFormat: 'Quantity of <b>{point.path}</b> is <b>{point.value}</b>',
-      },
     };
 
     return (
@@ -115,7 +127,7 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
         width={width}
       >
         <div>
-          <HighchartsReact allowChartUpdate highcharts={Highcharts} options={optionsTreeMap} />
+          <HighchartsReact highcharts={Highcharts} options={orderColumnChart} allowChartUpdate />
         </div>
       </Styles>
     );

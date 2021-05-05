@@ -1,7 +1,7 @@
 {
-  "name": "@superset-ui/plugin-chart-extreemap-highcharts",
+  "name": "@superset-ui/plugin-chart-exspline-highcharts",
   "version": "0.1.0",
-  "description": "Superset Chart - Extreemap Highcharts",
+  "description": "Superset Chart - Exspline Highcharts",
   "sideEffects": false,
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -18,9 +18,6 @@
   ],
   "author": "Exentriq",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/apache-superset/superset-ui/issues"
-  },
   "homepage": "https://github.com/ExentriqLtd/exentriq-advanced-analytics-ui#readme",
   "publishConfig": {
     "access": "public"

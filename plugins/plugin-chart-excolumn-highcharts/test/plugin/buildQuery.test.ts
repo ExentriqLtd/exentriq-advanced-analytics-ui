@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import buildQuery from '../../src/plugin/buildQuery';
 
-describe('ExtreemapHighcharts buildQuery', () => {
+describe('ExcolumnHighcharts buildQuery', () => {
   const formData = {
     datasource: '5__table',
     granularity_sqla: 'ds',

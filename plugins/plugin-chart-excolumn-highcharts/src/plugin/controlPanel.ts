@@ -100,7 +100,7 @@ const config: ControlPanelConfig = {
     {
       label: t('Query'),
       expanded: true,
-      controlSetRows: [['groupby'], ['adhoc_filters'], ['row_limit', null]],
+      controlSetRows: [['groupby'], ['metrics'], ['adhoc_filters'], ['row_limit', null]],
     },
     {
       label: t('Hello Controls!'),
@@ -156,7 +156,16 @@ const config: ControlPanelConfig = {
       ],
     },
   ],
-
+  // Time series charts need to override the `druidTimeSeries` and `sqlaTimeSeries`
+  // sections to add the time grain dropdown.
+  sectionOverrides: {
+    druidTimeSeries: {
+      controlSetRows: [['granularity', 'druid_time_origin'], ['time_range']],
+    },
+    sqlaTimeSeries: {
+      controlSetRows: [['granularity_sqla', 'time_grain_sqla'], ['time_range']],
+    },
+  },
   controlOverrides: {
     series: {
       validators: [validateNonEmpty],

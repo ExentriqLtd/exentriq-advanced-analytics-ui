@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import { ChartProps } from '@superset-ui/core';
 import transformProps from '../../src/plugin/transformProps';
 
-describe('ExtreemapHighcharts tranformProps', () => {
+describe('ExcolumnHighcharts tranformProps', () => {
   const formData = {
     colorScheme: 'bnbColors',
     datasource: '3__table',
@@ -18,7 +18,7 @@ describe('ExtreemapHighcharts tranformProps', () => {
     width: 800,
     height: 600,
     queryData: {
-      data: [{ name: 'Hulk', sum__num: 1 }],
+      data: [{ name: 'Hulk', sum__num: 1, __timestamp: 599616000000 }],
     },
   });
 
@@ -29,7 +29,7 @@ describe('ExtreemapHighcharts tranformProps', () => {
       boldText: true,
       headerFontSize: 'xs',
       headerText: 'my text',
-      data: [{ name: 'Hulk', sum__num: 1 }],
+      data: [{ name: 'Hulk', sum__num: 1, __timestamp: new Date(599616000000) }],
     });
   });
 });

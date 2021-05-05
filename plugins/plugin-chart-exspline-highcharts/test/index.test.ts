@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { ExtreemapHighchartsChartPlugin } from '../src';
+import { ExsplineHighchartsChartPlugin } from '../src';
 
 /**
  * The example tests in this file act as a starting point, and
@@ -26,8 +26,8 @@ import { ExtreemapHighchartsChartPlugin } from '../src';
  * treated correctly (e.g. formData from plugin controls
  * properly transform the data and/or any resulting props).
  */
-describe('@superset-ui/plugin-chart-extreemap-highcharts', () => {
+describe('@superset-ui/plugin-chart-exspline-highcharts', () => {
   it('exists', () => {
-    expect(ExtreemapHighchartsChartPlugin).toBeDefined();
+    expect(ExsplineHighchartsChartPlugin).toBeDefined();
   });
 });

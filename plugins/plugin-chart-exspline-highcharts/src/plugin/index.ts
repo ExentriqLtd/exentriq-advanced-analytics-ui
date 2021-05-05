@@ -22,7 +22,7 @@ import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from '../images/thumbnail.png';
 
-export default class ExtreemapHighchartsChartPlugin extends ChartPlugin {
+export default class ExsplineHighchartsChartPlugin extends ChartPlugin {
   /**
    * The constructor is used to pass relevant metadata and callbacks that get
    * registered in respective registries that are used throughout the library
@@ -35,15 +35,15 @@ export default class ExtreemapHighchartsChartPlugin extends ChartPlugin {
    */
   constructor() {
     const metadata = new ChartMetadata({
-      description: 'Extreemap Highcharts',
-      name: t('Extreemap Highcharts'),
+      description: 'Exspline Highcharts',
+      name: t('Exspline Highcharts'),
       thumbnail,
     });
 
     super({
       buildQuery,
       controlPanel,
-      loadChart: () => import('../ExtreemapHighcharts'),
+      loadChart: () => import('../ExsplineHighcharts'),
       metadata,
       transformProps,
     });

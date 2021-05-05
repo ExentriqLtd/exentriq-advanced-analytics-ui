@@ -1,26 +1,26 @@
-## @superset-ui/plugin-chart-extreemap-highcharts
+## @superset-ui/plugin-chart-exspline-highcharts
 
 
 
-This plugin provides Extreemap Highcharts for Superset.
+This plugin provides Exspline Highcharts for Superset.
 
 ### Usage
 
 Configure `key`, which can be any `string`, and register the plugin. This `key` will be used to lookup this chart throughout the app.
 
 ```js
-import ExtreemapHighchartsChartPlugin from '@superset-ui/plugin-chart-extreemap-highcharts';
+import ExsplineHighchartsChartPlugin from '@superset-ui/plugin-chart-exspline-highcharts';
 
-new ExtreemapHighchartsChartPlugin()
-  .configure({ key: 'extreemap-highcharts' })
+new ExsplineHighchartsChartPlugin()
+  .configure({ key: 'exspline-highcharts' })
   .register();
 ```
 
-Then use it via `SuperChart`. See [storybook](https://apache-superset.github.io/superset-ui/?selectedKind=plugin-chart-extreemap-highcharts) for more details.
+Then use it via `SuperChart`. See [storybook](https://apache-superset.github.io/superset-ui/?selectedKind=plugin-chart-exspline-highcharts) for more details.
 
 ```js
 <SuperChart
-  chartType="extreemap-highcharts"
+  chartType="exspline-highcharts"
   width={600}
   height={600}
   formData={...}
@@ -37,7 +37,7 @@ Then use it via `SuperChart`. See [storybook](https://apache-superset.github.io/
 ├── README.md
 ├── tsconfig.json
 ├── src
-│   ├── ExtreemapHighcharts.tsx
+│   ├── ExsplineHighcharts.tsx
 │   ├── images
 │   │   └── thumbnail.png
 │   ├── index.ts
