@@ -27,6 +27,7 @@ export interface ExcolumnHighchartsStylesProps {
 
 interface ExcolumnHighchartsCustomizeProps {
   headerText: string;
+  momentFormat: string;
 }
 
 export type ExcolumnHighchartsQueryFormData = QueryFormData &
