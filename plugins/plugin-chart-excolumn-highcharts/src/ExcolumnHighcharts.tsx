@@ -21,6 +21,7 @@ import { styled } from '@superset-ui/core';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import _ from 'lodash';
+import moment from 'moment';
 import { ExcolumnHighchartsProps, ExcolumnHighchartsStylesProps } from './types';
 
 // The following Styles component is a <div> element, which has been styled using Emotion
@@ -61,32 +62,23 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
     // height and width are the height and width of the DOM element as it exists in the dashboard.
     // There is also a `data` prop, which is, of course, your DATA 🎉
     console.log('Approach 1 props', this.props);
-    const { data, height, width } = this.props;
+    const { data, height, width, headerText, momentFormat } = this.props;
 
     console.log('Plugin props', this.props);
+
+    const categories = _.map(data, '__timestamp');
+    const dataSeries = _.map(data, 'SUM(Quantity)');
+    const newArray = categories.map(d => moment(d).format(momentFormat));
 
     const orderColumnChart = {
       chart: {
         type: 'column',
       },
       title: {
-        text: 'Monthly',
+        text: headerText,
       },
       xAxis: {
-        categories: [
-          'May 2020',
-          'Jun 2020',
-          'Jul 2020',
-          'Aug 2020',
-          'Sep 2020',
-          'Oct 2020',
-          'Nov 2020',
-          'Dec 2020',
-          'Jan 2021',
-          'Feb 2021',
-          'Mar 2021',
-          'Apr 2021',
-        ],
+        categories: newArray,
         crosshair: true,
       },
       yAxis: {
@@ -94,15 +86,6 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
         title: {
           text: 'Total',
         },
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat:
-          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true,
       },
       plotOptions: {
         column: {
@@ -113,7 +96,7 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
       series: [
         {
           name: 'Quantity',
-          data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+          data: dataSeries,
         },
       ],
     };
@@ -127,7 +110,7 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
         width={width}
       >
         <div>
-          <HighchartsReact highcharts={Highcharts} options={orderColumnChart} allowChartUpdate />
+          <HighchartsReact allowChartUpdate highcharts={Highcharts} options={orderColumnChart} />
         </div>
       </Styles>
     );

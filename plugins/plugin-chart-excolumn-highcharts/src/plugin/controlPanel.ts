@@ -103,7 +103,7 @@ const config: ControlPanelConfig = {
       controlSetRows: [['groupby'], ['metrics'], ['adhoc_filters'], ['row_limit', null]],
     },
     {
-      label: t('Hello Controls!'),
+      label: 'Controls',
       expanded: true,
       controlSetRows: [
         [
@@ -111,7 +111,7 @@ const config: ControlPanelConfig = {
             name: 'header_text',
             config: {
               type: 'TextControl',
-              default: 'Hello, World!',
+              default: '',
               renderTrigger: true,
               // ^ this makes it apply instantaneously, without triggering a "run query" button
               label: t('Header Text'),
@@ -121,35 +121,14 @@ const config: ControlPanelConfig = {
         ],
         [
           {
-            name: 'bold_text',
+            name: 'moment_format',
             config: {
-              type: 'CheckboxControl',
-              label: t('Bold Text'),
+              type: 'TextControl',
+              default: '',
               renderTrigger: true,
-              default: true,
-              description: t('A checkbox to make the '),
-            },
-          },
-        ],
-        [
-          {
-            name: 'header_font_size',
-            config: {
-              type: 'SelectControl',
-              label: t('Font Size'),
-              default: 'xl',
-              choices: [
-                // [value, label]
-                ['xxs', 'xx-small'],
-                ['xs', 'x-small'],
-                ['s', 'small'],
-                ['m', 'medium'],
-                ['l', 'large'],
-                ['xl', 'x-large'],
-                ['xxl', 'xx-large'],
-              ],
-              renderTrigger: true,
-              description: t('The size of your header font'),
+              // ^ this makes it apply instantaneously, without triggering a "run query" button
+              label: 'Moment Format',
+              description: '',
             },
           },
         ],

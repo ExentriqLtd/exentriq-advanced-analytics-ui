@@ -49,7 +49,7 @@ export default function transformProps(chartProps: ChartProps) {
    * be seen until restarting the development server.
    */
   const { width, height, formData, queryData } = chartProps;
-  const { boldText, headerFontSize, headerText } = formData;
+  const { headerText, momentFormat } = formData;
   const data = queryData.data as TimeseriesDataRecord[];
 
   console.log('formData via TransformProps.ts', formData);
@@ -65,8 +65,7 @@ export default function transformProps(chartProps: ChartProps) {
       __timestamp: new Date(item.__timestamp as number),
     })),
     // and now your control data, manipulated as needed, and passed through as props!
-    boldText,
-    headerFontSize,
+    momentFormat,
     headerText,
   };
 }
