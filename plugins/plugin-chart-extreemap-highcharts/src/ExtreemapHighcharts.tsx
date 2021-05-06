@@ -32,18 +32,11 @@ import { ExtreemapHighchartsProps, ExtreemapHighchartsStylesProps } from './type
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
 const Styles = styled.div<ExtreemapHighchartsStylesProps>`
-  background-color: ${({ theme }) => theme.colors.secondary.light2};
-  padding: ${({ theme }) => theme.gridUnit * 4}px;
-  border-radius: ${({ theme }) => theme.gridUnit * 2}px;
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
-  overflow-y: scroll;
-
-  h3 {
-    /* You can use your props to control CSS! */
-    font-size: ${({ theme, headerFontSize }) => theme.typography.sizes[headerFontSize]};
-    font-weight: ${({ theme, boldText }) => theme.typography.weights[boldText ? 'bold' : 'normal']};
-  }
+    padding: ${({ theme }) => theme.gridUnit * 4}px;
+    border-radius: ${({ theme }) => theme.gridUnit * 2}px;
+    height: ${({ height }) => height};
+    width: ${({ width }) => width};
+    overflow-y: scroll;
 `;
 
 /**
