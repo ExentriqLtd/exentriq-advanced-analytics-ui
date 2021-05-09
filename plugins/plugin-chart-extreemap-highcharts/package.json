@@ -1,6 +1,6 @@
 {
   "name": "@superset-ui/plugin-chart-extreemap-highcharts",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Superset Chart - Extreemap Highcharts",
   "sideEffects": false,
   "main": "lib/index.js",

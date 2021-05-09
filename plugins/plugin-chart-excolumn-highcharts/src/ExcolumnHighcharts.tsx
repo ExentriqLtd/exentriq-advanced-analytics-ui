@@ -61,13 +61,15 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
   render() {
     // height and width are the height and width of the DOM element as it exists in the dashboard.
     // There is also a `data` prop, which is, of course, your DATA 🎉
-    console.log('Approach 1 props', this.props);
     const { data, height, width, headerText, momentFormat } = this.props;
 
-    console.log('Plugin props', this.props);
+    // sort
+    const sortedData = data.sort(function (a, b) {
+      return a.__timestamp - b.__timestamp;
+    });
 
-    const categories = _.map(data, '__timestamp');
-    const dataSeries = _.map(data, 'SUM(Quantity)');
+    const categories = _.map(sortedData, '__timestamp');
+    const dataSeries = _.map(sortedData, 'SUM(Quantity)');
     const newArray = categories.map(d => moment(d).format(momentFormat));
 
     const orderColumnChart = {
