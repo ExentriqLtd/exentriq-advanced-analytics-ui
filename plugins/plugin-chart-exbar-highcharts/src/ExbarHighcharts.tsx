@@ -17,7 +17,7 @@
  * under the License.
  */
 import React, { PureComponent, createRef } from 'react';
-import { styled } from '@superset-ui/core';
+import { t, tn, styled } from '@superset-ui/core';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import _ from 'lodash';
@@ -52,18 +52,41 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
 
   rootElem = createRef<HTMLDivElement>();
 
+  constructor(props: ExbarHighchartsProps | Readonly<ExbarHighchartsProps>) {
+    super(props);
+    this.state = {
+      filterValue: '',
+    };
+  }
+
   componentDidMount() {
     const root = this.rootElem.current as HTMLElement;
     console.log('Plugin element', root);
+    const { data } = this.props;
+    this.updateChart(data);
   }
 
-  render() {
-    // height and width are the height and width of the DOM element as it exists in the dashboard.
-    // There is also a `data` prop, which is, of course, your DATA 🎉
-    console.log('Plugin props', this.props);
-    const { data, height, width } = this.props;
-    console.log('Plugin data', data);
+  onChangeFilter(event: any) {
+    const { value } = event.target;
+    this.setState({
+      filterValue: value,
+    });
+  }
 
+  onKeyFilter(event: any) {
+    //console.log(event)
+    if (event.key === 'Enter') {
+      console.log('Adding....');
+      const { filterValue } = this.state;
+      const { data } = this.props;
+      const filteredData = _.filter(data, function (val) {
+        return val.ProductName.toLowerCase().includes(filterValue.toLowerCase());
+      });
+      this.updateChart(filteredData);
+    }
+  }
+
+  updateChart(data: any) {
     const orderedData = _.orderBy(data, 'CurrentLevel', 'asc');
 
     const categories = _.map(orderedData, 'ProductName');
@@ -141,6 +164,19 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
       ],
     };
 
+    this.setState({
+      optionsBarChart,
+      count: categories.length,
+    });
+  }
+
+  render() {
+    // height and width are the height and width of the DOM element as it exists in the dashboard.
+    // There is also a `data` prop, which is, of course, your DATA 🎉
+    // console.log('Plugin props', this.props);
+    const { height, width } = this.props;
+    // console.log('Plugin data', data);
+
     return (
       <Styles
         ref={this.rootElem}
@@ -150,7 +186,21 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
         width={width}
       >
         <div>
-          <HighchartsReact allowChartUpdate highcharts={Highcharts} options={optionsBarChart} />
+          <span className="dt-global-filter">
+            {t('Search')}{' '}
+            <input
+              className="form-control input-sm"
+              placeholder={tn('search.num_records', this.state.count)}
+              value={this.state.filterValue}
+              onChange={event => this.onChangeFilter(event)}
+              onKeyPress={event => this.onKeyFilter(event)}
+            />
+          </span>
+          <HighchartsReact
+            allowChartUpdate
+            highcharts={Highcharts}
+            options={this.state.optionsBarChart}
+          />
         </div>
       </Styles>
     );

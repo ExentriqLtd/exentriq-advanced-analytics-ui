@@ -100,21 +100,56 @@ const config: ControlPanelConfig = {
     {
       label: t('Query'),
       expanded: true,
-      controlSetRows: [['groupby'], ['adhoc_filters'], ['row_limit', null]],
+      controlSetRows: [['groupby'], ['metrics'], ['adhoc_filters'], ['row_limit', null]],
     },
     {
-      label: t('Options'),
+      label: t('Hello Controls!'),
       expanded: true,
       controlSetRows: [
         [
           {
-            name: 'include_search',
+            name: 'header_text',
+            config: {
+              type: 'TextControl',
+              default: 'Hello, World!',
+              renderTrigger: true,
+              // ^ this makes it apply instantaneously, without triggering a "run query" button
+              label: t('Header Text'),
+              description: t('The text you want to see in the header'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'bold_text',
             config: {
               type: 'CheckboxControl',
-              label: t('Search Box'),
+              label: t('Bold Text'),
               renderTrigger: true,
-              default: false,
-              description: t('Whether to include a client-side search box'),
+              default: true,
+              description: t('A checkbox to make the '),
+            },
+          },
+        ],
+        [
+          {
+            name: 'header_font_size',
+            config: {
+              type: 'SelectControl',
+              label: t('Font Size'),
+              default: 'xl',
+              choices: [
+                // [value, label]
+                ['xxs', 'xx-small'],
+                ['xs', 'x-small'],
+                ['s', 'small'],
+                ['m', 'medium'],
+                ['l', 'large'],
+                ['xl', 'x-large'],
+                ['xxl', 'xx-large'],
+              ],
+              renderTrigger: true,
+              description: t('The size of your header font'),
             },
           },
         ],

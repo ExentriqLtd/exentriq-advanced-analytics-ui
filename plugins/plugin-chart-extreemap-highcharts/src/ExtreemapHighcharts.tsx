@@ -58,7 +58,7 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
     console.log('Plugin element', root);
   }
 
-  addValue(id, parent, name, path, value, color, treeMap) {
+  addValue(id: any, parent: any, name: any, path: any, value: any, color: any, treeMap: any) {
     const idx = treeMap.findIndex((el: { id: any; parent: any }) => {
       if (el.id == id && el.parent == parent) return true;
       return false;
@@ -78,7 +78,7 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
     }
   }
 
-  getId(obj, keys, i) {
+  getId(obj: any, keys: any, i: any) {
     let id = obj[keys[0]].trim();
     if (id == '') id = 'N/A';
     if (i == 0) return id;
@@ -89,7 +89,7 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
     return id;
   }
 
-  getPath(obj, keys, i) {
+  getPath(obj: any, keys: any, i: any) {
     let id = obj[keys[0]].trim();
     if (id == '') id = 'N/A';
     if (i == 0) return id;

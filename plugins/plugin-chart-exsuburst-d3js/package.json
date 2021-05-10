@@ -1,7 +1,7 @@
 {
-  "name": "@superset-ui/plugin-chart-exbar-highcharts",
-  "version": "0.3.0",
-  "description": "Superset Chart - Exbar Highcharts",
+  "name": "@superset-ui/plugin-chart-exsuburst-d3js",
+  "version": "0.2.0",
+  "description": "Superset Chart - Exsuburst D3Js",
   "sideEffects": false,
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -11,22 +11,25 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExentriqLtd/exentriq-advanced-analytics-ui"
+    "url": "git+https://github.com/apache-superset/superset-ui.git"
   },
   "keywords": [
     "superset"
   ],
-  "author": "Exentriq",
+  "author": "Superset",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/ExentriqLtd/exentriq-advanced-analytics-ui#readme",
+  "bugs": {
+    "url": "https://github.com/apache-superset/superset-ui/issues"
+  },
+  "homepage": "https://github.com/apache-superset/superset-ui#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@superset-ui/chart-controls": "^0.15.2",
     "@superset-ui/core": "^0.15.2",
-    "highcharts": "^9.1.0",
-    "highcharts-react-official": "^3.0.0"
+    "d3": "^6.7.0",
+    "d3-scale": "^3.3.0"
   },
   "peerDependencies": {
     "react": "^16.13.1"

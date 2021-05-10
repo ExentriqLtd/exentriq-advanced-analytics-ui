@@ -232,8 +232,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
 
   console.log(props);
 
-  console.log(this);
-
   const [filters, setFilters] = useState(initialFilters);
 
   // only take relevant page size options

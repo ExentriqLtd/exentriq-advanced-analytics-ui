@@ -64,8 +64,8 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
     const { data, height, width, headerText, momentFormat } = this.props;
 
     // sort
-    const sortedData = data.sort(function (a, b) {
-      return a.__timestamp - b.__timestamp;
+    const sortedData = data.sort(function (a: any, b: any) {
+      return a['__timestamp'] - b['__timestamp'];
     });
 
     const categories = _.map(sortedData, '__timestamp');
