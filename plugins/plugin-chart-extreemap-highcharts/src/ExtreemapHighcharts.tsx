@@ -32,11 +32,7 @@ import { ExtreemapHighchartsProps, ExtreemapHighchartsStylesProps } from './type
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
 const Styles = styled.div<ExtreemapHighchartsStylesProps>`
-    padding: ${({ theme }) => theme.gridUnit * 4}px;
-    border-radius: ${({ theme }) => theme.gridUnit * 2}px;
-    height: ${({ height }) => height};
-    width: ${({ width }) => width};
-    overflow-y: scroll;
+  margin-top: ${({ theme }) => theme.gridUnit * 4}px;
 `;
 
 /**
@@ -79,25 +75,25 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
   }
 
   getId(obj: any, keys: any, i: any) {
-    let id = obj[keys[0]].trim();
-    if (id == '') id = 'N/A';
+    let id = obj[keys[0]];
+    if (id == '' || id == null) id = 'N/A';
     if (i == 0) return id;
     if (i == -1) return '';
     for (let j = 1; j <= i; j++) {
-      id = `${id}_${obj[keys[j]].trim()}`;
+      id = `${id}_${obj[keys[j]]}`;
     }
     return id;
   }
 
   getPath(obj: any, keys: any, i: any) {
-    let id = obj[keys[0]].trim();
-    if (id == '') id = 'N/A';
+    let id = obj[keys[0]];
+    if (id == '' || id == null) id = 'N/A';
     if (i == 0) return id;
 
     if (i == -1) return '';
 
     for (let j = 1; j <= i; j++) {
-      id = `${id} > ${obj[keys[j]].trim()}`;
+      id = `${id} > ${obj[keys[j]]}`;
     }
     return id;
   }
@@ -105,26 +101,26 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
   render() {
     // height and width are the height and width of the DOM element as it exists in the dashboard.
     // There is also a `data` prop, which is, of course, your DATA 🎉
-    console.log('Approach 1 props', this.props);
     const { data, height, width } = this.props;
-
     const treeMap: { value: any }[] = [];
     const keys = Object.keys(data[0]);
     const colorList = ['#7030a0', '#00b050', '#00b0f0', '#c55911'];
-    let colorMap = [];
+    const colorMap = [];
     let colorIdx = 0;
 
-    for (const obj of data) {
-      if(obj[keys[0]] == "")
-        continue;
+    const orderedData = _.orderBy(data, keys['0'], 'desc');
+    console.log('OrderedData', orderedData);
+   
+    for (const obj of orderedData) {
+      if (obj[keys[0]] == '') continue;
 
-      if(!colorMap[this.getId(obj, keys, 0)]){
+      if (!colorMap[this.getId(obj, keys, 0)]) {
         colorMap[this.getId(obj, keys, 0)] = colorList[colorIdx];
-        colorIdx ++;
-        colorIdx = colorIdx % colorList.length;
+        colorIdx++;
+        colorIdx %= colorList.length;
       }
       const color = colorMap[this.getId(obj, keys, 0)];
-      for (let i = 0; i < keys.length-1; i++) {
+      for (let i = 0; i < keys.length - 1; i++) {
         const id = this.getId(obj, keys, i);
         const parentId = this.getId(obj, keys, i - 1);
         const value = obj[keys[keys.length - 1]];
@@ -138,7 +134,9 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
 
     const optionsTreeMap = {
       chart: {
-        height: '60%',
+        height: height - 16,
+        width,
+        margin: [0, 0, 0, 0],
       },
       series: [
         {
@@ -177,13 +175,7 @@ export default class ExtreemapHighcharts extends PureComponent<ExtreemapHighchar
     addTreemapModule(Highcharts);
 
     return (
-      <Styles
-        ref={this.rootElem}
-        boldText={this.props.boldText}
-        headerFontSize={this.props.headerFontSize}
-        height={height}
-        width={width}
-      >
+      <Styles>
         <div>
           <HighchartsReact allowChartUpdate highcharts={Highcharts} options={optionsTreeMap} />
         </div>

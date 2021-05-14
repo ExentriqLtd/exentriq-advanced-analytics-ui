@@ -31,11 +31,9 @@ import { ExsplineHighchartsProps, ExsplineHighchartsStylesProps } from './types'
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
 const Styles = styled.div<ExsplineHighchartsStylesProps>`
-  padding: ${({ theme }) => theme.gridUnit * 4}px;
-  border-radius: ${({ theme }) => theme.gridUnit * 2}px;
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
-  overflow-y: scroll;
+  height: ${({ height }) => height}px;
+  width: ${({ width }) => width}px;
+  margin-top: ${({ theme }) => theme.gridUnit * 4}px;
 `;
 
 /**
@@ -77,6 +75,8 @@ export default class ExsplineHighcharts extends PureComponent<ExsplineHighcharts
     const dailyChart = {
       chart: {
         type: 'spline',
+        height: height - 16,
+        width,
       },
       title: {
         text: '',

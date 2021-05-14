@@ -32,11 +32,9 @@ import { ExcolumnHighchartsProps, ExcolumnHighchartsStylesProps } from './types'
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
 const Styles = styled.div<ExcolumnHighchartsStylesProps>`
-  padding: ${({ theme }) => theme.gridUnit * 4}px;
-  border-radius: ${({ theme }) => theme.gridUnit * 2}px;
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
-  overflow-y: scroll;
+  height: ${({ height }) => height}px;
+  width: ${({ width }) => width}px;
+  margin-top: ${({ theme }) => theme.gridUnit * 4}px;
 `;
 
 /**
@@ -65,7 +63,7 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
 
     // sort
     const sortedData = data.sort(function (a: any, b: any) {
-      return a['__timestamp'] - b['__timestamp'];
+      return a.__timestamp - b.__timestamp;
     });
 
     const categories = _.map(sortedData, '__timestamp');
@@ -75,6 +73,8 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
     const orderColumnChart = {
       chart: {
         type: 'column',
+        height: height - 16,
+        width,
       },
       title: {
         text: headerText,
@@ -105,9 +105,6 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
 
     return (
       <Styles
-        ref={this.rootElem}
-        boldText={this.props.boldText}
-        headerFontSize={this.props.headerFontSize}
         height={height}
         width={width}
       >

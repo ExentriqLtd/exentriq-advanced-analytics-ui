@@ -31,10 +31,15 @@ import { ExbarHighchartsProps, ExbarHighchartsStylesProps } from './types';
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
 
 const Styles = styled.div<ExbarHighchartsProps>`
-  padding: ${({ theme }) => theme.gridUnit * 4}px;
   border-radius: ${({ theme }) => theme.gridUnit * 2}px;
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
+  margin-top: ${({ theme }) => theme.gridUnit * 2}px;
+`;
+
+const Scrollable = styled.div<ExbarHighchartsProps>`
+  height: ${({ height }) => height}px;
+  width: ${({ width }) => width}px;
+  border: 1px solid #3333;
+  margin-top: ${({ theme }) => theme.gridUnit * 4}px;
   overflow-y: scroll;
 `;
 
@@ -52,7 +57,7 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
 
   rootElem = createRef<HTMLDivElement>();
 
-  constructor(props: ExbarHighchartsProps | Readonly<ExbarHighchartsProps>) {
+  constructor(props: ExbarHighchartsProps) {
     super(props);
     this.state = {
       filterValue: '',
@@ -62,38 +67,29 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
   componentDidMount() {
     const root = this.rootElem.current as HTMLElement;
     console.log('Plugin element', root);
-    const { data } = this.props;
-    this.updateChart(data);
-  }
-
-  onChangeFilter(event: any) {
-    const { value } = event.target;
-    this.setState({
-      filterValue: value,
-    });
   }
 
   onKeyFilter(event: any) {
-    //console.log(event)
     if (event.key === 'Enter') {
-      console.log('Adding....');
-      const { filterValue } = this.state;
-      const { data } = this.props;
-      const filteredData = _.filter(data, function (val) {
-        return val.ProductName.toLowerCase().includes(filterValue.toLowerCase());
+      this.setState({
+        filterValue: event.target.value,
       });
-      this.updateChart(filteredData);
     }
   }
 
-  updateChart(data: any) {
-    const orderedData = _.orderBy(data, 'CurrentLevel', 'asc');
+  getOptionsChart() {
+    const { data } = this.props;
+    const { filterValue } = this.state;
+    const filteredData = _.filter(data, function (val) {
+      return val.ProductName.toLowerCase().includes(filterValue.toLowerCase());
+    });
+    const orderedData = _.orderBy(filteredData, 'CurrentLevel', 'asc');
 
     const categories = _.map(orderedData, 'ProductName');
     const currentLevel = _.map(orderedData, 'CurrentLevel');
     const reorderPoint = _.map(orderedData, 'ReorderPoint');
 
-    let chartHeight = 50 * categories.length;
+    let chartHeight = 30 * categories.length;
     if (chartHeight < 200) chartHeight = 200;
 
     // Inventory Bar Chart
@@ -124,6 +120,7 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
       },
       plotOptions: {
         bar: {
+          groupPadding: 0,
           dataLabels: {
             enabled: true,
             formatter() {
@@ -140,6 +137,7 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
           negativeColor: '#FF0000',
         },
       },
+      minPointLength: 50,
       legend: {
         layout: 'vertical',
         align: 'right',
@@ -160,48 +158,35 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
         {
           name: 'Reorder Point',
           data: reorderPoint,
+          opacity: 0.9,
         },
       ],
     };
 
-    this.setState({
-      optionsBarChart,
-      count: categories.length,
-    });
+    return optionsBarChart;
   }
 
   render() {
     // height and width are the height and width of the DOM element as it exists in the dashboard.
     // There is also a `data` prop, which is, of course, your DATA 🎉
     // console.log('Plugin props', this.props);
-    const { height, width } = this.props;
-    // console.log('Plugin data', data);
+    const { height, width, data } = this.props;
+    console.log('Plugin data ', data);
+    const optionsBarChart = this.getOptionsChart();
 
     return (
-      <Styles
-        ref={this.rootElem}
-        boldText={this.props.boldText}
-        headerFontSize={this.props.headerFontSize}
-        height={height}
-        width={width}
-      >
-        <div>
-          <span className="dt-global-filter">
-            {t('Search')}{' '}
-            <input
-              className="form-control input-sm"
-              placeholder={tn('search.num_records', this.state.count)}
-              value={this.state.filterValue}
-              onChange={event => this.onChangeFilter(event)}
-              onKeyPress={event => this.onKeyFilter(event)}
-            />
-          </span>
-          <HighchartsReact
-            allowChartUpdate
-            highcharts={Highcharts}
-            options={this.state.optionsBarChart}
+      <Styles boldText={this.props.boldText} headerFontSize={this.props.headerFontSize}>
+        <span className="dt-global-filter">
+          {t('Search')}{' '}
+          <input
+            className="form-control input-sm"
+            placeholder={tn('search.num_records', data.length)}
+            onKeyPress={event => this.onKeyFilter(event)}
           />
-        </div>
+        </span>
+        <Scrollable height={height - 70} width={width}>
+          <HighchartsReact allowChartUpdate highcharts={Highcharts} options={optionsBarChart} />
+        </Scrollable>
       </Styles>
     );
   }
