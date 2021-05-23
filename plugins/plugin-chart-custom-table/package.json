@@ -1,5 +1,5 @@
 {
-  "name": "@calosan/plugin-chart-custom-table",
+  "name": "@superset-ui/plugin-chart-custom-table",
   "version": "0.0.2",
   "description": "Superset Chart - Custom Table",
   "sideEffects": false,

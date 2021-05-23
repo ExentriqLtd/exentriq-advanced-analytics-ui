@@ -1,6 +1,6 @@
 {
   "name": "@superset-ui/plugin-chart-exsuburst-d3js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Superset Chart - Exsuburst D3Js",
   "sideEffects": false,
   "main": "lib/index.js",

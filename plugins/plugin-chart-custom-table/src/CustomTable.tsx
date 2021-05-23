@@ -156,6 +156,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     onChangeFilter,
     filters: initialFilters,
     sticky = true, // whether to use sticky header
+    annotationColumn,
   } = props;
 
   const [filters, setFilters] = useState(initialFilters);
@@ -278,7 +279,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   );
 
   const columns = useMemo(() => {
-    console.log(columnsMeta);
     return columnsMeta.map(getColumnConfigs);
   }, [columnsMeta, getColumnConfigs]);
 
@@ -299,6 +299,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         selectPageSize={pageSize !== null && SelectPageSize}
         // not in use in Superset, but needed for unit tests
         sticky={sticky}
+        annotationColumn={annotationColumn}
       />
     </Styles>
   );

@@ -274,7 +274,18 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-
+        [
+          {
+            name: 'annotation_column',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Annotation Column',
+              description: '',
+            },
+          },
+        ],
         [
           {
             name: 'include_search',

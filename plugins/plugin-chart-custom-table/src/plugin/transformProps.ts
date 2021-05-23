@@ -221,6 +221,7 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     pageLength: pageSize = 0,
     tableFilter,
     orderDesc: sortDesc = false,
+    annotationColumn,
   } = formData;
 
   const [metrics, percentMetrics, columns] = processColumns(chartProps);
@@ -242,5 +243,6 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     filters,
     emitFilter: tableFilter === true,
     onChangeFilter,
+    annotationColumn,
   };
 }

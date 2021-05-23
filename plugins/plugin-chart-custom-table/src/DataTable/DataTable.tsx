@@ -70,6 +70,7 @@ export default function DataTable<D extends object>({
   noResults = 'No data found',
   hooks,
   wrapperRef: userWrapperRef,
+  annotationColumn,
   ...moreUseTableOptions
 }: DataTableProps<D>) {
   const tableHooks: PluginHook<D>[] = [
@@ -149,6 +150,7 @@ export default function DataTable<D extends object>({
     },
     ...tableHooks,
   );
+
   // make setPageSize accept 0
   const setPageSize = (size: number) => {
     // keep the original size if data is empty
@@ -157,6 +159,15 @@ export default function DataTable<D extends object>({
     }
   };
 
+  const showAnnotations = (param: any) => {
+    console.log('calling postMessage...', param);
+    const { tag } = param;
+    if (window.parent) {
+      window.parent.postMessage({ action: 'open_view_annotations', tag }, '*');
+    }
+  };
+
+  console.log('0 renderTable...', annotationColumn);
   const renderTable = () => (
     <table {...getTableProps({ className: tableClassName })}>
       <thead>
@@ -164,6 +175,7 @@ export default function DataTable<D extends object>({
           const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
           return (
             <tr key={headerGroupKey || headerGroup.id} {...headerGroupProps}>
+              {annotationColumn && <th>Annotations</th>}
               {headerGroup.headers.map(column => {
                 return column.render('Header', {
                   key: column.id,
@@ -179,8 +191,17 @@ export default function DataTable<D extends object>({
           page.map(row => {
             prepareRow(row);
             const { key: rowKey, ...rowProps } = row.getRowProps();
+            const tag =
+              annotationColumn && row.cells[annotationColumn]
+                ? row.cells[annotationColumn].value
+                : null;
             return (
               <tr key={rowKey || row.id} {...rowProps}>
+                {annotationColumn && (
+                  <td>
+                    <a onClick={() => showAnnotations({ tag })}>View</a>
+                  </td>
+                )}
                 {row.cells.map(cell => cell.render('Cell', { key: cell.column.id }))}
               </tr>
             );
