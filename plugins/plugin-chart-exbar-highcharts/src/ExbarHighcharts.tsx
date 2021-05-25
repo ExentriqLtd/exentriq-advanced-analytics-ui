@@ -61,6 +61,8 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
     super(props);
     this.state = {
       filterValue: '',
+      sortBy: '',
+      sortType: '',
     };
   }
 
@@ -77,13 +79,28 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
     }
   }
 
+  onSortByChange(event: any) {
+    this.setState({
+      sortBy: event.target.value,
+    });
+  }
+
+  onSortTypeChange(event: any) {
+    this.setState({
+      sortType: event.target.value,
+    });
+  }
+
   getOptionsChart() {
     const { data } = this.props;
-    const { filterValue } = this.state;
+    const { filterValue, sortBy, sortType } = this.state;
     const filteredData = _.filter(data, function (val) {
       return val.ProductName.toLowerCase().includes(filterValue.toLowerCase());
     });
-    const orderedData = _.orderBy(filteredData, 'CurrentLevel', 'asc');
+
+    console.log("0... sortBy",sortBy);
+    console.log("0... sortType",sortType);
+    const orderedData = _.orderBy(filteredData, sortBy || 'CurrentLevel', sortType || 'asc');
 
     const categories = _.map(orderedData, 'ProductName');
     const currentLevel = _.map(orderedData, 'CurrentLevel');
@@ -174,16 +191,66 @@ export default class ExbarHighcharts extends PureComponent<ExbarHighchartsProps>
     console.log('Plugin data ', data);
     const optionsBarChart = this.getOptionsChart();
 
+    const optionsSortby = [
+      { key: 'CurrentLevel', text: 'CurrentLevel' },
+      { key: 'ProductName', text: 'ProductName' },
+      { key: 'ReorderPoint', text: 'ReorderPoint' },
+    ];
+
+    const optionsSortType = [
+      { key: 'asc', text: 'Asc' },
+      { key: 'desc', text: 'Desc' }
+    ];
+
     return (
       <Styles boldText={this.props.boldText} headerFontSize={this.props.headerFontSize}>
-        <span className="dt-global-filter">
-          {t('Search')}{' '}
-          <input
-            className="form-control input-sm"
-            placeholder={tn('search.num_records', data.length)}
-            onKeyPress={event => this.onKeyFilter(event)}
-          />
-        </span>
+        <div className="form-inline dt-controls">
+          <div className="row">
+            <div className="col-sm-6">
+              <span className="dt-global-filter">
+                {t('Sort by')}{' '}
+                <select
+                  className="form-control input-sm"
+                  onChange={e => {
+                    this.onSortByChange(e);
+                  }}
+                >
+                  {optionsSortby.map(option => {
+                    return (
+                      <option key={option.key} value={option.key}>
+                        {option.text}
+                      </option>
+                    );
+                  })}
+                </select>
+                <select
+                  className="form-control input-sm"
+                  onChange={e => {
+                    this.onSortTypeChange(e);
+                  }}
+                >
+                  {optionsSortType.map(option => {
+                    return (
+                      <option key={option.key} value={option.key}>
+                        {option.text}
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
+            </div>
+            <div className="col-sm-6 align-right">
+              <span className="dt-global-filter">
+                {t('Search')}{' '}
+                <input
+                  className="form-control input-sm"
+                  placeholder={tn('search.num_records', data.length)}
+                  onKeyPress={event => this.onKeyFilter(event)}
+                />
+              </span>
+            </div>
+          </div>
+        </div>
         <Scrollable height={height - 70} width={width}>
           <HighchartsReact allowChartUpdate highcharts={Highcharts} options={optionsBarChart} />
         </Scrollable>
