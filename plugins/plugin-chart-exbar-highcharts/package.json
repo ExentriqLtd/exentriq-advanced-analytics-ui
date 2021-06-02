@@ -1,6 +1,6 @@
 {
-  "name": "@superset-ui/plugin-chart-exbar-highcharts",
-  "version": "0.3.2",
+  "name": "@exentriq-dashboard/plugin-chart-exbar-highcharts",
+  "version": "0.3.3",
   "description": "Superset Chart - Exbar Highcharts",
   "sideEffects": false,
   "main": "lib/index.js",

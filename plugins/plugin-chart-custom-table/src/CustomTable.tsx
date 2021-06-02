@@ -282,11 +282,43 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     return columnsMeta.map(getColumnConfigs);
   }, [columnsMeta, getColumnConfigs]);
 
+  const showAnnotations = (param: any) => {
+    console.log('0..calling postMessage...', param);
+    const { tag } = param;
+    if (window.parent) {
+      window.parent.postMessage({ action: 'open_view_annotations', tag }, '*');
+    }
+  };
+
+  let finalData = data;
+
+  if (annotationColumn) {
+    columns.unshift({
+      id: String(columns.length),
+      accessor: 'AnnotationKeyColumn',
+      Header: () => {
+        return <th>Annotations</th>;
+      },
+      Cell: ({ column: col, value }) => {
+        return (
+          <td>
+            <a onClick={() => showAnnotations({ tag: value })}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#4a4a4a">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+              </svg>
+            </a>
+          </td>
+        );
+      },
+    });
+    finalData = data.map(obj => ({ ...obj, AnnotationKeyColumn: obj[annotationColumn] }));
+  }
+  
   return (
     <Styles>
       <DataTable<D>
         columns={columns}
-        data={data}
+        data={finalData}
         tableClassName="table table-striped table-condensed"
         pageSize={pageSize}
         pageSizeOptions={pageSizeOptions}
@@ -299,7 +331,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         selectPageSize={pageSize !== null && SelectPageSize}
         // not in use in Superset, but needed for unit tests
         sticky={sticky}
-        annotationColumn={annotationColumn}
       />
     </Styles>
   );
