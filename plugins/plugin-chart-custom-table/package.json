@@ -1,6 +1,6 @@
 {
   "name": "@exentriq-dashboard/plugin-chart-custom-table",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Superset Chart - Custom Table",
   "sideEffects": false,
   "main": "lib/index.js",

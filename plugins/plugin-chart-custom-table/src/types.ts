@@ -63,6 +63,8 @@ export interface TableChartFormData {
   timeGrainSqla?: TimeGranularity;
   numberFormat?: string | null;
   annotationColumn?: string | null;
+  annotationLabel?: string | null;
+  annotationUsers?: string | null;
 }
 
 export interface TableChartProps<D extends DataRecord = DataRecord> extends ChartProps {

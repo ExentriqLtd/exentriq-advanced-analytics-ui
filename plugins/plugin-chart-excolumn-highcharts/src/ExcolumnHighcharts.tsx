@@ -61,8 +61,13 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
     // There is also a `data` prop, which is, of course, your DATA 🎉
     const { data, height, width, headerText, momentFormat } = this.props;
 
+    const dataFixed = data.map(value => {
+      value.__timestamp = new Date(value.__timestamp).getTime() + new Date(value.__timestamp).getTimezoneOffset() * 60 * 1000;
+      return value;
+    });
+
     // sort
-    const sortedData = data.sort(function (a: any, b: any) {
+    const sortedData = dataFixed.sort(function (a: any, b: any) {
       return a.__timestamp - b.__timestamp;
     });
 
@@ -104,10 +109,7 @@ export default class ExcolumnHighcharts extends PureComponent<ExcolumnHighcharts
     };
 
     return (
-      <Styles
-        height={height}
-        width={width}
-      >
+      <Styles height={height} width={width}>
         <div>
           <HighchartsReact allowChartUpdate highcharts={Highcharts} options={orderColumnChart} />
         </div>

@@ -213,6 +213,8 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     hooks: { onAddFilter: onChangeFilter },
   } = chartProps;
 
+  console.log("0... formData", formData);
+
   const {
     alignPn: alignPositiveNegative = true,
     colorPn: colorPositiveNegative = true,
@@ -222,6 +224,9 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     tableFilter,
     orderDesc: sortDesc = false,
     annotationColumn,
+    annotationLabel,
+    annotationUsers,
+    dashboardInfo,
   } = formData;
 
   const [metrics, percentMetrics, columns] = processColumns(chartProps);
@@ -244,5 +249,8 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     emitFilter: tableFilter === true,
     onChangeFilter,
     annotationColumn,
+    annotationLabel,
+    annotationUsers,
+    dashboardInfo
   };
 }

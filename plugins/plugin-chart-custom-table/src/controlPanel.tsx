@@ -288,6 +288,30 @@ const config: ControlPanelConfig = {
         ],
         [
           {
+            name: 'annotation_label',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Annotation Label',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'annotation_users',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Annotation Users',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
             name: 'include_search',
             config: {
               type: 'CheckboxControl',
