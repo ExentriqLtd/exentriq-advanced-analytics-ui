@@ -26,7 +26,7 @@ export default function transformProps(chartProps: ChartProps) {
    *
    * The transformProps function is also quite useful to return
    * additional/modified props to your data viz component. The formData
-   * can also be accessed from your ExsuburstD3Js.tsx file, but
+   * can also be accessed from your ExdownloadData.tsx file, but
    * doing supplying custom props here is often handy for integrating third
    * party libraries that rely on specific props.
    *
@@ -49,18 +49,20 @@ export default function transformProps(chartProps: ChartProps) {
    * be seen until restarting the development server.
    */
   const { width, height, formData, queryData } = chartProps;
-  const { boldText, headerFontSize, headerText } = formData;
+  const { serviceApi, momentFormat, dataset, headerCsv } = formData;
   const data = queryData.data as TimeseriesDataRecord[];
+  const { queries } = queryData;
 
-  console.log('formData via TransformProps.ts', chartProps);
+  console.log('formData via TransformProps.ts', formData);
 
   return {
     width,
     height,
     data,
-    // and now your control data, manipulated as needed, and passed through as props!
-    boldText,
-    headerFontSize,
-    headerText,
+    serviceApi,
+    momentFormat,
+    dataset,
+    headerCsv,
+    queries,
   };
 }

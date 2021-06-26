@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { ColumnInstance, DefaultSortTypes, ColumnWithLooseAccessor } from 'react-table';
 import { extent as d3Extent, max as d3Max } from 'd3-array';
 import { FaSort, FaSortUp as FaSortAsc, FaSortDown as FaSortDesc } from 'react-icons/fa';
@@ -163,12 +163,71 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   } = props;
 
   const [filters, setFilters] = useState(initialFilters);
+  const [finalData, setFinalData] = useState();
 
   // only take relevant page size options
   const pageSizeOptions = useMemo(
     () => PAGE_SIZE_OPTIONS.filter(([n, _]) => n <= 2 * data.length) as SizeOption[],
     [data.length],
   );
+
+  useEffect(() => {
+    let annotationEnabled = true;
+    if (annotationUsers && dashboardInfo) {
+      annotationEnabled = annotationUsers.split(',').includes(dashboardInfo.userId);
+    }
+    
+    if (annotationColumn && annotationEnabled) {
+      // ottengo le annotations
+      const annotationKeys = data.map(obj => obj[annotationColumn]);
+      console.log('annotationKeys -->', annotationKeys);
+
+      const request = {
+        id: 3,
+        method: 'approvalCommentsServiceImpl.getApprovalCommentsByObjectIdAndApp',
+        params: [
+          90302,
+          90302,
+          'ANNOTATION',
+          null,
+          null,
+          1,
+          20,
+          'c.commentDate DESC',
+          'NAT-8020227,NAT-8020227',
+          null,
+          null,
+          null,
+          null,
+        ],
+      };
+
+      const fetchAnnotations = async () => {
+        fetch('https://www.exentriq.com/JSON-RPC', {
+          method: 'POST',
+          body: JSON.stringify(request),
+        })
+          .then(response => response.json())
+          .then(responseData => {
+            const dataWithAnnotations = data.map(obj => ({
+              ...obj,
+              AnnotationKeyColumn: { key: obj[annotationColumn], count: 1 },
+            }));
+
+            setFinalData(dataWithAnnotations);
+            console.log('finalData -->', dataWithAnnotations, annotationColumn);
+          })
+          .catch(error => {
+            setFinalData(data);
+            console.error('Error:', error);
+          });
+      };
+
+      fetchAnnotations();
+    } else {
+      setFinalData(data);
+    }
+  }, []);
 
   const getValueRange = useCallback(
     function getValueRange(key: string) {
@@ -293,11 +352,12 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     }
   };
 
-  let finalData = data;
   let annotationEnabled = true;
   if (annotationUsers && dashboardInfo) {
     annotationEnabled = annotationUsers.split(',').includes(dashboardInfo.userId);
   }
+
+  if (!finalData) return null;
 
   if (annotationColumn && annotationEnabled) {
     columns.unshift({
@@ -309,7 +369,8 @@ export default function TableChart<D extends DataRecord = DataRecord>(
       Cell: ({ column: col, value }) => {
         return (
           <td>
-            <a onClick={() => showAnnotations({ tag: value })}>
+            <a onClick={() => showAnnotations({ tag: value.key })}>
+              {value.count}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
@@ -325,7 +386,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         );
       },
     });
-    finalData = data.map(obj => ({ ...obj, AnnotationKeyColumn: obj[annotationColumn] }));
   }
 
   return (
