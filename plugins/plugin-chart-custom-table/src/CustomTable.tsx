@@ -160,10 +160,14 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     annotationLabel,
     annotationUsers,
     dashboardInfo,
+    serviceApi,
+    spaceId,
+    annotationObj,
   } = props;
 
   const [filters, setFilters] = useState(initialFilters);
   const [finalData, setFinalData] = useState();
+  const [triggerAnnotation, setTriggerAnnotation] = useState();
 
   // only take relevant page size options
   const pageSizeOptions = useMemo(
@@ -172,47 +176,48 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   );
 
   useEffect(() => {
+    window.addEventListener(
+      'message',
+      event => {
+        if (event.data && event.data === 'reloadAnnotation') {
+          console.log('0...PostMessage', event);
+          setTriggerAnnotation(new Date().getTime());
+        }
+      },
+      false,
+    );
+  }, []);
+
+  useEffect(() => {
     let annotationEnabled = true;
     if (annotationUsers && dashboardInfo) {
       annotationEnabled = annotationUsers.split(',').includes(dashboardInfo.userId);
     }
-    
-    if (annotationColumn && annotationEnabled) {
-      // ottengo le annotations
-      const annotationKeys = data.map(obj => obj[annotationColumn]);
-      console.log('annotationKeys -->', annotationKeys);
 
+    if (annotationColumn && annotationEnabled) {
+      // get annotations
       const request = {
         id: 3,
-        method: 'approvalCommentsServiceImpl.getApprovalCommentsByObjectIdAndApp',
-        params: [
-          90302,
-          90302,
-          'ANNOTATION',
-          null,
-          null,
-          1,
-          20,
-          'c.commentDate DESC',
-          'NAT-8020227,NAT-8020227',
-          null,
-          null,
-          null,
-          null,
-        ],
+        method: 'approvalCommentsServiceImpl.countListApprovalCommentsByObjectIdAndApp',
+        params: [spaceId, annotationObj, 'ANNOTATION'],
       };
 
+      //'https://www.exentriq.com/JSON-RPC' [90302, 90302, 'ANNOTATION']
       const fetchAnnotations = async () => {
-        fetch('https://www.exentriq.com/JSON-RPC', {
+        fetch(serviceApi, {
           method: 'POST',
           body: JSON.stringify(request),
         })
           .then(response => response.json())
           .then(responseData => {
-            const dataWithAnnotations = data.map(obj => ({
-              ...obj,
-              AnnotationKeyColumn: { key: obj[annotationColumn], count: 1 },
-            }));
+            const dataWithAnnotations = data.map(obj => {
+              const key = obj[annotationColumn];
+              const count = responseData.result.map[key];
+              return {
+                ...obj,
+                AnnotationKeyColumn: { key, count },
+              };
+            });
 
             setFinalData(dataWithAnnotations);
             console.log('finalData -->', dataWithAnnotations, annotationColumn);
@@ -227,7 +232,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     } else {
       setFinalData(data);
     }
-  }, []);
+  }, [triggerAnnotation]);
 
   const getValueRange = useCallback(
     function getValueRange(key: string) {
@@ -367,20 +372,24 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         return <th>{annotationLabel}</th>;
       },
       Cell: ({ column: col, value }) => {
+        const color = value.count > 0 ? '#4a4a4a' : '#c0c0c0';
         return (
           <td>
             <a onClick={() => showAnnotations({ tag: value.key })}>
-              {value.count}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 0 24 24"
-                width="24px"
-                fill="#4a4a4a"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-              </svg>
+              {value.count > 0 ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                  fill={color}
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                </svg>
+              ) : (
+                'Add'
+              )}
             </a>
           </td>
         );

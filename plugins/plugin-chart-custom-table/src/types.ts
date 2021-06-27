@@ -65,6 +65,10 @@ export interface TableChartFormData {
   annotationColumn?: string | null;
   annotationLabel?: string | null;
   annotationUsers?: string | null;
+  serviceApi?: string | null;
+  spaceId?: string | null;
+  annotationObj?: string | null;
+  dashboardInfo?: any;
 }
 
 export interface TableChartProps<D extends DataRecord = DataRecord> extends ChartProps {
@@ -93,4 +97,11 @@ export interface TableChartTransformedProps<D extends DataRecord = DataRecord> {
   filters?: DataRecordFilters;
   emitFilter?: boolean;
   onChangeFilter?: ChartProps['hooks']['onAddFilter'];
+  annotationColumn?: string | null;
+  annotationLabel?: string | null;
+  annotationUsers?: string | null;
+  serviceApi?: string | null;
+  spaceId?: string | null;
+  annotationObj?: string | null;
+  dashboardInfo?: any;
 }

@@ -312,6 +312,42 @@ const config: ControlPanelConfig = {
         ],
         [
           {
+            name: 'service_api',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Service Api',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'space_id',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Space Id',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'annotation_obj',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Annotation Obj',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
             name: 'include_search',
             config: {
               type: 'CheckboxControl',

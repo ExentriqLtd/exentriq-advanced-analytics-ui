@@ -227,6 +227,9 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     annotationLabel,
     annotationUsers,
     dashboardInfo,
+    serviceApi,
+    spaceId,
+    annotationObj,
   } = formData;
 
   const [metrics, percentMetrics, columns] = processColumns(chartProps);
@@ -251,6 +254,9 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     annotationColumn,
     annotationLabel,
     annotationUsers,
-    dashboardInfo
+    dashboardInfo,
+    serviceApi,
+    spaceId,
+    annotationObj,
   };
 }
