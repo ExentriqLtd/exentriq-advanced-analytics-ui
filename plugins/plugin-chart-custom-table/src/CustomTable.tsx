@@ -180,7 +180,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
       'message',
       event => {
         if (event.data && event.data === 'reloadAnnotation') {
-          console.log('0...PostMessage', event);
           setTriggerAnnotation(new Date().getTime());
         }
       },
@@ -232,7 +231,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     } else {
       setFinalData(data);
     }
-  }, [triggerAnnotation]);
+  }, [triggerAnnotation, data]);
 
   const getValueRange = useCallback(
     function getValueRange(key: string) {
@@ -350,7 +349,6 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   }, [columnsMeta, getColumnConfigs]);
 
   const showAnnotations = (param: any) => {
-    console.log('0..calling postMessage...', param);
     const { tag } = param;
     if (window.parent) {
       window.parent.postMessage({ action: 'open_view_annotations', tag }, '*');

@@ -1,6 +1,6 @@
 {
-  "name": "@superset-ui/plugin-chart-exdownload-data",
-  "version": "0.0.0",
+  "name": "@exentriq-dashboard/plugin-chart-exdownload-data",
+  "version": "0.2.0",
   "description": "Superset Chart - Exdownload Data",
   "sideEffects": false,
   "main": "lib/index.js",
@@ -26,8 +26,10 @@
     "access": "public"
   },
   "dependencies": {
+    "@superset-ui/chart-controls": "^0.15.2",
     "@superset-ui/core": "^0.15.2",
-    "@superset-ui/chart-controls": "^0.15.2"
+    "moment": "^2.29.1",
+    "react-bootstrap": "^0.33.1"
   },
   "peerDependencies": {
     "react": "^16.13.1"

@@ -213,8 +213,6 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     hooks: { onAddFilter: onChangeFilter },
   } = chartProps;
 
-  console.log("0... formData", formData);
-
   const {
     alignPn: alignPositiveNegative = true,
     colorPn: colorPositiveNegative = true,
