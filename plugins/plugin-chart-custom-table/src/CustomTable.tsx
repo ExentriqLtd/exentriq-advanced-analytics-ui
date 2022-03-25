@@ -163,6 +163,9 @@ export default function TableChart<D extends DataRecord = DataRecord>(
     serviceApi,
     spaceId,
     annotationObj,
+    alignConfig,
+    colorConfig,
+    indexColumn,
   } = props;
 
   const [filters, setFilters] = useState(initialFilters);
@@ -201,7 +204,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         params: [spaceId, annotationObj, 'ANNOTATION'],
       };
 
-      //'https://www.exentriq.com/JSON-RPC' [90302, 90302, 'ANNOTATION']
+      // 'https://www.exentriq.com/JSON-RPC' [90302, 90302, 'ANNOTATION']
       const fetchAnnotations = async () => {
         fetch(serviceApi, {
           method: 'POST',
@@ -209,9 +212,17 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         })
           .then(response => response.json())
           .then(responseData => {
+            const annotationsMap = responseData.result.map;
+            const annotationsLC = Object.keys(annotationsMap).reduce((destination, key) => {
+              destination[key.replace(/ /g, '_').toLowerCase()] = annotationsMap[key];
+              return destination;
+            }, {});
+
             const dataWithAnnotations = data.map(obj => {
-              const key = obj[annotationColumn];
-              const count = responseData.result.map[key];
+              const key = obj[annotationColumn]
+                ? obj[annotationColumn].replace(/ /g, '_').toLowerCase()
+                : null;
+              const count = annotationsLC[key];
               return {
                 ...obj,
                 AnnotationKeyColumn: { key, count },
@@ -279,6 +290,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         className += ' dt-is-filter';
       }
       const valueRange = showCellBars && getValueRange(key);
+
       return {
         id: String(i), // to allow duplicate column keys
         // must use custom accessor to allow `.` in column names
@@ -286,7 +298,17 @@ export default function TableChart<D extends DataRecord = DataRecord>(
         // so we ask TS not to check.
         accessor: ((datum: D) => datum[key]) as never,
         Cell: ({ column: col, value }: { column: ColumnInstance<D>; value: DataRecordValue }) => {
+          // console.log("Column Col", col);
           const [isHtml, text] = formatValue(column, value);
+          const align = alignConfig ? alignConfig[col.id] : null;
+          const customColor = colorConfig ? colorConfig[col.id] : [];
+
+          const textColor = customColor
+            ? customColor.find(a => {
+                return parseFloat(value) <= a.value;
+              })
+            : {};
+
           const style = {
             background: valueRange
               ? cellBar({
@@ -296,6 +318,8 @@ export default function TableChart<D extends DataRecord = DataRecord>(
                   colorPositiveNegative,
                 })
               : undefined,
+            textAlign: align,
+            color: textColor ? textColor.color : null,
           };
           const html = isHtml ? { __html: text } : undefined;
           const cellProps = {
@@ -316,11 +340,16 @@ export default function TableChart<D extends DataRecord = DataRecord>(
           return <td {...cellProps}>{text}</td>;
         },
         Header: ({ column: col, title, onClick, style }) => {
+          const align = alignConfig ? alignConfig[col.id] : null;
+          const styleHeader = {
+            ...style,
+            textAlign: align,
+          };
           return (
             <th
               title={title}
               className={col.isSorted ? `${className || ''} is-sorted` : className}
-              style={style}
+              style={styleHeader}
               onClick={onClick}
             >
               {label}
@@ -391,6 +420,20 @@ export default function TableChart<D extends DataRecord = DataRecord>(
             </a>
           </td>
         );
+      },
+    });
+  }
+
+  if (indexColumn) {
+    columns.unshift({
+      id: String(columns.length),
+      accessor: 'IndexKeyColumn',
+      Header: () => {
+        return <th>Idx</th>;
+      },
+      Cell: ({ column: col, value, row }) => {
+        console.log('RowValue', row);
+        return <td>{row.id}</td>;
       },
     });
   }

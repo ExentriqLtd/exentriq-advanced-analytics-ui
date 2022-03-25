@@ -69,6 +69,9 @@ export interface TableChartFormData {
   spaceId?: string | null;
   annotationObj?: string | null;
   dashboardInfo?: any;
+  alignConfig: any;
+  colorConfig: any;
+  indexColumn?: boolean;
 }
 
 export interface TableChartProps<D extends DataRecord = DataRecord> extends ChartProps {

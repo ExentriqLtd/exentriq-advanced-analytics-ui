@@ -228,11 +228,17 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     serviceApi,
     spaceId,
     annotationObj,
+    alignConfig,
+    colorConfig,
+    indexColumn,
   } = formData;
 
   const [metrics, percentMetrics, columns] = processColumns(chartProps);
   const data = processDataRecords(queryData?.data?.records, columns);
-
+  
+  const parsedAlignConfig = alignConfig ? JSON.parse(alignConfig) : null;
+  const parsedColorConfig = colorConfig ? JSON.parse(colorConfig) : null;
+ 
   return {
     height,
     width,
@@ -256,5 +262,8 @@ export default function transformProps(chartProps: TableChartProps): TableChartT
     serviceApi,
     spaceId,
     annotationObj,
+    alignConfig: parsedAlignConfig,
+    colorConfig: parsedColorConfig,
+    indexColumn,
   };
 }

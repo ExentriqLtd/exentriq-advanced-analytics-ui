@@ -348,6 +348,43 @@ const config: ControlPanelConfig = {
         ],
         [
           {
+            name: 'align_config',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Text Align Config',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'color_config',
+            config: {
+              type: 'TextControl',
+              default: '',
+              renderTrigger: true,
+              label: 'Color Config',
+              description: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'index_column',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show Index Column'),
+              renderTrigger: true,
+              default: false,
+              description: '',
+            },
+          },
+          null,
+        ],
+        [
+          {
             name: 'include_search',
             config: {
               type: 'CheckboxControl',
